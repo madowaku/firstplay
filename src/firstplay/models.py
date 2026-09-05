@@ -18,7 +18,7 @@ class Action:
     reason: str | None = None
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Action":
+    def from_dict(cls, data: dict[str, Any]) -> Action:
         action_type = data.get("type")
         if action_type not in {"click", "key", "type_text", "wait", "stop"}:
             raise ValueError(f"Unsupported action type: {action_type!r}")
@@ -52,7 +52,7 @@ class Friction:
     message: str = ""
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any] | None) -> "Friction":
+    def from_dict(cls, data: dict[str, Any] | None) -> Friction:
         data = data or {}
         severity = data.get("severity", "none")
         if severity not in {"none", "low", "medium", "high"}:
@@ -69,7 +69,7 @@ class Decision:
     confidence: float
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "Decision":
+    def from_dict(cls, data: dict[str, Any]) -> Decision:
         confidence = float(data.get("confidence", 0.0))
         confidence = max(0.0, min(1.0, confidence))
         return cls(

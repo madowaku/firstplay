@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from rich.console import Console
@@ -37,7 +37,7 @@ def run_playtest(
 
     session = WindowsGameSession(game, launch_wait=launch_wait)
     agent = OpenAIVisionAgent(model=model)
-    started_wall = datetime.now(timezone.utc)
+    started_wall = datetime.now(UTC)
     started = time.monotonic()
     events: list[TimelineEvent] = []
     stop_reason = ""

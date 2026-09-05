@@ -9,12 +9,17 @@ from collections.abc import Sequence
 from .models import Decision, TimelineEvent
 
 SYSTEM_PROMPT = """You are FirstPlay, a black-box first-time game playtester.
-You must behave like a real new player who can only see the current game window and use ordinary mouse/keyboard input.
-Never assume hidden state, source code, scene trees, debug APIs, DOM/accessibility metadata, telemetry, or developer intent.
+You must behave like a real new player who can only see the current game window
+and use ordinary mouse/keyboard input.
+Never assume hidden state, source code, scene trees, debug APIs, DOM/accessibility
+metadata, telemetry, or developer intent.
 Take exactly ONE action per turn.
-Prefer cautious, ordinary player actions. Do not use operating-system shortcuts, shell commands, developer consoles, or destructive actions.
-If the game is clearly finished, the goal is complete, or continuing would be unsafe, choose stop.
-Record friction only when the visible experience gives a new player a real reason to hesitate, misread, or get stuck.
+Prefer cautious, ordinary player actions. Do not use operating-system shortcuts,
+shell commands, developer consoles, or destructive actions.
+If the game is clearly finished, the goal is complete, or continuing would be unsafe,
+choose stop.
+Record friction only when the visible experience gives a new player a real reason to
+hesitate, misread, or get stuck.
 Return JSON only, with this exact shape:
 {
   "observation": "what is visibly on screen",
@@ -31,7 +36,8 @@ Return JSON only, with this exact shape:
   },
   "confidence": 0.0
 }
-For click, coordinates are pixels relative to the supplied game screenshot, whose top-left is (0,0).
+For click, coordinates are pixels relative to the supplied game screenshot,
+whose top-left is (0,0).
 Only include fields relevant to the chosen action when practical.
 """
 
@@ -115,7 +121,5 @@ def _history_text(events: Sequence[TimelineEvent]) -> str:
             detail += "(<text>)"
         elif action.type == "wait":
             detail += f"({action.seconds}s)"
-        lines.append(
-            f"step {event.step}: saw {event.decision.observation!r}; acted {detail}"
-        )
+        lines.append(f"step {event.step}: saw {event.decision.observation!r}; acted {detail}")
     return "\n".join(lines)

@@ -17,6 +17,7 @@ app = typer.Typer(
     no_args_is_help=True,
 )
 console = Console()
+DEFAULT_OUTPUT_ROOT = Path("firstplay-runs")
 
 
 @app.command()
@@ -47,7 +48,9 @@ def doctor() -> None:
 
 @app.command("run")
 def run_command(
-    game: Path = typer.Argument(..., exists=True, dir_okay=False, readable=True),
+    game: Path = typer.Argument(  # noqa: B008
+        ..., exists=True, dir_okay=False, readable=True
+    ),
     goal: str = typer.Option(
         "Start the game and try to understand how to play.",
         "--goal",
@@ -61,7 +64,7 @@ def run_command(
     seconds: int = typer.Option(60, min=1, max=3600),
     max_steps: int = typer.Option(30, min=1, max=500),
     launch_wait: float = typer.Option(2.0, min=0.0, max=30.0),
-    output: Path = typer.Option(Path("firstplay-runs"), "--output"),
+    output: Path = typer.Option(DEFAULT_OUTPUT_ROOT, "--output"),
     close_game: bool = typer.Option(False, "--close-game"),
 ) -> None:
     """Launch GAME and run one black-box first-time playtest."""
