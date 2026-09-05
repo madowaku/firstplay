@@ -28,6 +28,7 @@ class WindowsGameSession:
     def __init__(self, executable: Path, launch_wait: float = 2.0) -> None:
         if os.name != "nt":
             raise RuntimeError("FirstPlay v0.1 currently supports Windows only")
+        _enable_dpi_awareness()
         self.executable = executable.resolve()
         self.launch_wait = launch_wait
         self.process: subprocess.Popen[bytes] | None = None
@@ -89,6 +90,14 @@ class WindowsGameSession:
         elif action.type == "key":
             assert action.key
             pyautogui.press(action.key)
+        elif action.type == "hold_key":
+            assert action.key and action.seconds is not None
+            duration = max(0.05, min(action.seconds, 2.0))
+            pyautogui.keyDown(action.key)
+            try:
+                time.sleep(duration)
+            finally:
+                pyautogui.keyUp(action.key)
         elif action.type == "type_text":
             pyautogui.write(action.text or "", interval=0.03)
         elif action.type == "wait":
@@ -109,6 +118,16 @@ class WindowsGameSession:
     @property
     def is_running(self) -> bool:
         return bool(self.process and self.process.poll() is None)
+
+
+def _enable_dpi_awareness() -> None:
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
+    except (AttributeError, OSError):
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except (AttributeError, OSError):
+            pass
 
 
 def _find_window_for_pid(pid: int) -> int | None:

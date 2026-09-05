@@ -64,7 +64,7 @@ def run_command(
     seconds: int = typer.Option(60, min=1, max=3600),
     max_steps: int = typer.Option(30, min=1, max=500),
     launch_wait: float = typer.Option(2.0, min=0.0, max=30.0),
-    output: Path = typer.Option(DEFAULT_OUTPUT_ROOT, "--output"),
+    output: Path = typer.Option(DEFAULT_OUTPUT_ROOT, "--output"),  # noqa: B008
     close_game: bool = typer.Option(False, "--close-game"),
 ) -> None:
     """Launch GAME and run one black-box first-time playtest."""

@@ -36,6 +36,22 @@ def test_parse_fenced_json() -> None:
     assert decision.action.type == "wait"
 
 
+def test_parse_hold_key() -> None:
+    decision = parse_decision(
+        """{
+          "observation": "Character can move",
+          "understanding": "W likely moves forward",
+          "friction": {"severity": "none", "message": ""},
+          "action": {"type": "hold_key", "key": "w", "seconds": 0.5},
+          "confidence": 0.8
+        }"""
+    )
+
+    assert decision.action.type == "hold_key"
+    assert decision.action.key == "w"
+    assert decision.action.seconds == 0.5
+
+
 def test_confidence_is_clamped() -> None:
     decision = parse_decision(
         """{

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
 
-ActionType = Literal["click", "key", "type_text", "wait", "stop"]
+ActionType = Literal["click", "key", "hold_key", "type_text", "wait", "stop"]
 Severity = Literal["none", "low", "medium", "high"]
 
 
@@ -20,7 +20,7 @@ class Action:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> Action:
         action_type = data.get("type")
-        if action_type not in {"click", "key", "type_text", "wait", "stop"}:
+        if action_type not in {"click", "key", "hold_key", "type_text", "wait", "stop"}:
             raise ValueError(f"Unsupported action type: {action_type!r}")
 
         action = cls(
@@ -38,8 +38,10 @@ class Action:
     def validate(self) -> None:
         if self.type == "click" and (self.x is None or self.y is None):
             raise ValueError("click requires x and y")
-        if self.type == "key" and not self.key:
-            raise ValueError("key requires key")
+        if self.type in {"key", "hold_key"} and not self.key:
+            raise ValueError(f"{self.type} requires key")
+        if self.type == "hold_key" and self.seconds is None:
+            raise ValueError("hold_key requires seconds")
         if self.type == "type_text" and self.text is None:
             raise ValueError("type_text requires text")
         if self.type == "wait" and self.seconds is None:

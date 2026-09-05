@@ -26,7 +26,7 @@ Return JSON only, with this exact shape:
   "understanding": "what a new player currently thinks is happening",
   "friction": {"severity": "none|low|medium|high", "message": "short explanation or empty string"},
   "action": {
-    "type": "click|key|type_text|wait|stop",
+    "type": "click|key|hold_key|type_text|wait|stop",
     "x": 0,
     "y": 0,
     "key": "",
@@ -38,6 +38,8 @@ Return JSON only, with this exact shape:
 }
 For click, coordinates are pixels relative to the supplied game screenshot,
 whose top-left is (0,0).
+Use hold_key for movement or controls that a player would naturally hold down.
+Keep hold_key durations short; FirstPlay caps them for safety.
 Only include fields relevant to the chosen action when practical.
 """
 
@@ -115,8 +117,10 @@ def _history_text(events: Sequence[TimelineEvent]) -> str:
         detail = action.type
         if action.type == "click":
             detail += f"({action.x},{action.y})"
-        elif action.type == "key":
+        elif action.type in {"key", "hold_key"}:
             detail += f"({action.key})"
+            if action.type == "hold_key":
+                detail += f" for {action.seconds}s"
         elif action.type == "type_text":
             detail += "(<text>)"
         elif action.type == "wait":

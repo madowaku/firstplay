@@ -85,6 +85,8 @@ def _timeline_markdown(event: TimelineEvent) -> list[str]:
         action_text = f"click ({action.x}, {action.y})"
     elif action.type == "key":
         action_text = f"key `{action.key}`"
+    elif action.type == "hold_key":
+        action_text = f"hold key `{action.key}` for {action.seconds}s"
     elif action.type == "type_text":
         action_text = "type text"
     elif action.type == "wait":

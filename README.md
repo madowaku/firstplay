@@ -31,7 +31,7 @@ Model: gpt-5.6-luna
 [00:04] action    click (642, 511)
 [00:09] sees      Character in a room; no movement hint visible
 [00:10] friction  MEDIUM — movement is not explained
-[00:11] action    key "w"
+[00:11] action    hold 'w' for 0.5s
 [00:15] sees      Character moved upward; WASD discovered
 ...
 
@@ -60,20 +60,16 @@ Requirements:
 - An OpenAI API key for the v0.1 vision adapter
 
 ```powershell
-# clone and install
 git clone https://github.com/madowaku/firstplay.git
 cd firstplay
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -e .
 
-# configure the model provider
 $env:OPENAI_API_KEY="..."
 
-# check the environment
 firstplay doctor
 
-# run a first-time playtest
 firstplay run "C:\Games\MyGame\MyGame.exe" `
   --goal "Start the game and try to understand how to play" `
   --seconds 60
@@ -87,6 +83,7 @@ v0.1 intentionally exposes a tiny action vocabulary:
 
 - `click(x, y)`
 - `key(key)`
+- `hold_key(key, seconds)` — capped at 2 seconds per action
 - `type_text(text)`
 - `wait(seconds)`
 - `stop(reason)`
@@ -132,8 +129,9 @@ Options:
 - [x] Launch a Windows executable
 - [x] Resolve and focus the game's real window
 - [x] Capture only that window
+- [x] Handle Windows DPI scaling for screenshot/input alignment
 - [x] Vision-model observation + one-action decision
-- [x] Mouse/keyboard execution
+- [x] Mouse click, key press, and short key-hold execution
 - [x] Screenshot evidence
 - [x] JSON timeline + Markdown friction report
 - [x] CLI doctor command

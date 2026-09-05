@@ -126,6 +126,8 @@ def _print_event(event: TimelineEvent) -> None:
         detail = f"click ({action.x}, {action.y})"
     elif action.type == "key":
         detail = f"key {action.key!r}"
+    elif action.type == "hold_key":
+        detail = f"hold {action.key!r} for {action.seconds}s"
     elif action.type == "type_text":
         detail = "type text"
     elif action.type == "wait":
