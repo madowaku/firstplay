@@ -1,0 +1,59 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "firstplay"
+version = "0.1.0"
+description = "Black-box first-time game playtesting with a vision model"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [{ name = "madowaku" }]
+keywords = ["game-testing", "playtesting", "ai", "vision", "godot", "unity", "qa"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+  "mss>=10.0.0",
+  "openai>=1.0.0",
+  "Pillow>=10.0.0",
+  "psutil>=6.0.0",
+  "pyautogui>=0.9.54",
+  "rich>=13.0.0",
+  "typer>=0.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.8.0",
+]
+
+[project.scripts]
+firstplay = "firstplay.cli:app"
+
+[project.urls]
+Homepage = "https://github.com/madowaku/firstplay"
+Repository = "https://github.com/madowaku/firstplay"
+Issues = "https://github.com/madowaku/firstplay/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/firstplay"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
